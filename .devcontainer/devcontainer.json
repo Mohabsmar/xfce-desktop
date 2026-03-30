@@ -1,7 +1,13 @@
 {
   "name": "XFCE Desktop",
-  "build": {
-    "dockerfile": "Dockerfile"
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {
+      "noVnc": true,
+      "password": "codespace",
+      "webPort": "6080",
+      "vncPort": "5901"
+    }
   },
   "forwardPorts": [6080, 5901],
   "portsAttributes": {
@@ -11,6 +17,7 @@
       "visibility": "public"
     }
   },
-  "postStartCommand": "vncserver :0 -geometry 1920x1080 -depth 24 -localhost no && sleep 2 && cd /usr/share/novnc && websockify --web=/usr/share/novnc 6080 localhost:5901 &",
-  "remoteUser": "root"
+  "postCreateCommand": "sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y xfce4 xfce4-goodies xfce4-terminal",
+  "remoteUser": "root",
+  "postStartCommand": "echo 'startxfce4' > ~/.xsession"
 }
